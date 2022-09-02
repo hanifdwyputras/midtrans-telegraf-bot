@@ -12,11 +12,11 @@ export default class ListTrasactionCommand extends BaseCommand {
     }
 
     public async execute(ctx: CommandContext) {
-        const U = await this.client.customer.getById(ctx.from.id);
+        const U = await this.client.customer.getById(ctx.from!.id);
         if (!U || (U && !U.verified)) return await ctx.reply("You can't use this command because you're not registered or haven't completed verification.");
         
         const trs = await this.client.transaction.getAll();
-        const trss = trs.filter(tr => tr.customerId == ctx.from.id);
+        const trss = trs.filter(tr => tr.customerId == ctx.from!.id);
 
         if (!trss.length) return await ctx.reply("You don't have any transactions");
         else {

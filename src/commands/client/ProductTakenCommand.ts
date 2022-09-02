@@ -13,14 +13,14 @@ export default class ProductTakenCommand extends BaseCommand {
     }
 
     public async execute(ctx: CommandContext, args: string[]) {
-        const U = await this.client.customer.getById(ctx.from.id);
+        const U = await this.client.customer.getById(ctx.from!.id);
         if (!U || (U && !U.verified)) return await ctx.reply("You can't use this command because you're not registered or haven't completed verification.");
         
         const code = args[0];
         if (!code) return await ctx.reply("Please provide transaction code");
         const P = await this.client.transaction.getById(code);
         
-        if (!P || P.product_customer || (P && P.customerId != ctx.from.id)) return await ctx.reply("The ID you provided could not be found");
+        if (!P || P.product_customer || (P && P.customerId != ctx.from!.id)) return await ctx.reply("The ID you provided could not be found");
         await this.client.transaction._transactionModel.update({
             product_customer: true
         }, {

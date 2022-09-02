@@ -35,7 +35,9 @@ export default class TransactionController {
             price,
             quantity,
             paid: false,
-            payment: "notyet"
+            payment: "notyet",
+            token: '',
+            payUrl: '',
         };
 
 
@@ -45,8 +47,7 @@ export default class TransactionController {
                 order_id: id
             },
             customer_details: {
-                email:user.email,
-                country_code: "IDN"
+                email: user.email,
             },
             item_details: [
                 {
@@ -58,10 +59,10 @@ export default class TransactionController {
             ]
         });
 
-        object["token"] = tre.token;
+        object['token'] = tre!.token;
         await this._transactionModel.create(object);
 
-        object["payUrl"] = tre.redirect_url;
+        object["payUrl"] = tre!.redirect_url;
         return object;
     }
 

@@ -16,8 +16,8 @@ export default class InfoProductCommand extends BaseCommand {
         if (!code) return await ctx.reply("Please enter the product code");
         const m = await ctx.reply("Processing ...");
         const product = await this.client.product.get(code);
-        if (!product) return await ctx.telegram.editMessageText(ctx.chat.id, m.message_id, "", "Not found");
-        else return await ctx.telegram.editMessageText(ctx.chat.id, m.message_id, "", `- Product Code: \`${product.id}\`\n- Product Name: ${product.name}\n- Product description: ${product.description}\n- Product Stocks: ${product.stocks}\n- Product Price: \`${product.price.toLocaleString()} IDR\`\n- Added at: \`${product.createdAt}\``, {
+        if (!product) return await ctx.telegram.editMessageText(ctx.chat!.id, m.message_id, "", "Not found");
+        else return await ctx.telegram.editMessageText(ctx.chat!.id, m.message_id, "", `- Product Code: \`${product.id}\`\n- Product Name: ${product.name}\n- Product description: ${product.description}\n- Product Stocks: ${product.stocks}\n- Product Price: \`${product.price.toLocaleString()} IDR\`\n- Added at: \`${product.createdAt}\``, {
             parse_mode: "Markdown"
         });
     }

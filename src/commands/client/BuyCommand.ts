@@ -13,7 +13,7 @@ export default class BuyCommand extends BaseCommand {
     }
 
     public async execute(ctx: CommandContext, args: string[]) {
-        const U = await this.client.customer.getById(ctx.from.id);
+        const U = await this.client.customer.getById(ctx.from!.id);
         if (!U || (U && !U.verified)) return await ctx.reply("You can't buy because you're not registered or haven't completed verification.");
 
         const code = args[0];
@@ -24,7 +24,7 @@ export default class BuyCommand extends BaseCommand {
         const quantity = args[1];
         if (!quantity || /[^0-9]/g.test(quantity)) return await ctx.reply("Please give me valid number(s) for quantity");
         else if(parseInt(quantity) > product.stocks) return await ctx.reply("We don't have enough stocks for this product as your quantity request");
-        const tr = await this.client.transaction.insert(ctx.from.id, product.name, product.price, Number(quantity));
+        const tr = await this.client.transaction.insert(ctx.from!.id, product.name, product.price, Number(quantity));
         if (!tr) return await ctx.reply("Sesuatu ada yang salah dengan sistem");
         else {
             await this.client.product.sub(product.id, parseInt(quantity));

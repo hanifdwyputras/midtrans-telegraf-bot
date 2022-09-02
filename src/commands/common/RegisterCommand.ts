@@ -2,6 +2,7 @@ import BaseCommand from "../../abstracts/basecommand.abstract";
 import type MidtransBot from "../../client/bot";
 import type { CommandContext } from "../../types";
 import deepValidator from "deep-email-validator";
+import type { OutputFormat } from "deep-email-validator/dist/output/output";
 
 export default class RegisterCommand extends BaseCommand {
     constructor(client: MidtransBot) {
@@ -24,12 +25,12 @@ export default class RegisterCommand extends BaseCommand {
             validateMx: true,
             validateSMTP: false
         });
-        if (!valid) return await ctx.reply("Failed to register, because " + validators[reason].reason);
+        if (!valid) return await ctx.reply("Failed to register, because " + validators[reason as keyof OutputFormat['validators']]?.reason);
         
-        const U = await this.client.customer.insert(ctx.from.id, email);
+        const U = await this.client.customer.insert(ctx.from!.id, email);
         if (!U) return await ctx.reply("Failed to register, because you have registered or the email you provided is invalid.");
         else {
-            await this.client.verification.insert(ctx.from.id, email);
+            await this.client.verification.insert(ctx.from!.id, email);
             await ctx.reply("Successfully registered you to the database. Please check your email inbox to see the verification code.");
         }
     }

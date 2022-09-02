@@ -105,7 +105,10 @@ export default class StrukPrinter {
 </body>
 </html>
         `;
-        const browser = await Puppeteer.launch();
+        const browser = await Puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: true,
+        });
         const page = await browser.newPage();
         await page.setContent(template);
         await page.setViewport({

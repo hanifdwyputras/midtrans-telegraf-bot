@@ -10,18 +10,18 @@ export default function CooldownManage(id: number, cooldown: number, commandName
         if (!cooldowns.has(commandName)) cooldowns.set(commandName, new Map());
         const now = Date.now();
         const timestamps = cooldowns.get(commandName);
-        if (!timestamps.has(id)) {
-            timestamps.set(id, now);
+        if (!timestamps!.has(id)) {
+            timestamps!.set(id, now);
         } else {
-            const expirationTime = timestamps.get(id) + cooldown;
+            const expirationTime = timestamps?.get(id)! + cooldown;
             if (now < expirationTime && !cooldownSend.has(id)) {
                 const timeLeft = (expirationTime - now) / 1000;
                 cooldownSend.set(id, true);
                 return { timeLeft };
             }
-            timestamps.set(id, now);
+            timestamps!.set(id, now);
             setTimeout(() => {
-                timestamps.delete(id);
+                timestamps!.delete(id);
                 cooldownSend.delete(id);
             }, cooldown);
         }

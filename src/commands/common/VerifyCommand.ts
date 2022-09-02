@@ -12,18 +12,18 @@ export default class VerifyCommand extends BaseCommand {
     }
 
     public async execute(ctx: CommandContext, args: string[]) {
-        const U = await this.client.customer.getById(ctx.from.id);
+        const U = await this.client.customer.getById(ctx.from!.id);
         if (!U || (U && U.verified)) return await ctx.reply("Sorry, you haven't registered or verified before.");
         const code = args[0];
         if (!code) return await ctx.reply("Provide the verification code you received.");
         const m = await ctx.reply("Please wait, the verification process is in progress.");
-        const verified = await this.client.verification.verify(ctx.from.id, code);
-        if (verified == false) return await ctx.telegram.editMessageText(ctx.chat.id, m.message_id, "", "Verification code does not match");
+        const verified = await this.client.verification.verify(ctx.from!.id, code);
+        if (verified == false) return await ctx.telegram.editMessageText(ctx.chat!.id, m.message_id, "", "Verification code does not match");
         else if (verified == null) {
-            await this.client.verification.insert(ctx.from.id, U.email);
-            return await ctx.telegram.editMessageText(ctx.chat.id, m.message_id, "", "Verification expires, a new verification code has been sent.");
+            await this.client.verification.insert(ctx.from!.id, U.email);
+            return await ctx.telegram.editMessageText(ctx.chat!.id, m.message_id, "", "Verification expires, a new verification code has been sent.");
         } else {
-            return await ctx.telegram.editMessageText(ctx.chat.id, m.message_id, "", "🎉 Congratulations, your account has been verified");
+            return await ctx.telegram.editMessageText(ctx.chat!.id, m.message_id, "", "🎉 Congratulations, your account has been verified");
         }
     }
 }
